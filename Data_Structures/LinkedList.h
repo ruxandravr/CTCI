@@ -8,10 +8,6 @@ struct Node {
         Node<V> *prev;
         Node<V> *next;
 
-        //  Node() {
-        //     prev = next = nullptr;
-        // }
-
         Node(V value) {
             this->value = value;
             prev = next = nullptr;
@@ -23,6 +19,12 @@ struct Node {
             this->next = other.next;
 
             return *this;
+        }
+
+        Node(Node<V> &other) {
+            this->value = other.value;
+            this->prev = other.prev;
+            this->next = other.next;
         }
 
 };
@@ -39,7 +41,7 @@ struct LinkedList {
 
         /* Destructor */
         ~LinkedList() {
-            std::cout << "Destructor\n";
+            // std::cout << "Destructor\n";
             /* Option 1 */
             // Node<V> *current = first;
             // while (first != last) {
@@ -74,7 +76,6 @@ struct LinkedList {
                     otherFirst = otherFirst->next;
                 }
                 addLast(otherLast->value);
-                
             }
         }
         
@@ -90,7 +91,7 @@ struct LinkedList {
                 }
                 addLast(otherLast->value);
                 
-                delete otherFirst, otherLast;
+                // delete otherFirst, otherLast;
             }
             return *this;
         }
@@ -162,6 +163,24 @@ struct LinkedList {
                 first = last = nullptr;
             }
             delete current;
+        }
+
+        bool contains(V value) {
+            if (isEmpty()) {
+                return false;
+            } else {
+                Node<V> *current = first;
+                while (current != last) {
+                    if (current->value == value) {
+                        return true;
+                    }
+                    current = current->next;
+                }
+                if (last->value == value) {
+                    return true;
+                }
+            }
+            return false;
         }
 };
 

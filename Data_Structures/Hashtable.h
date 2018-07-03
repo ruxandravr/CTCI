@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-
+#include <functional>
 using namespace std;
 
 #define MAXSIZE 64
@@ -32,15 +32,22 @@ class Hashtable {
         /* vector of lists -> chaining */
         vector<list<Entry<K, V> > > H;
         int size;
-
-        /* hash func */
-        int hash(K key) {
+        
+        
+        /* Default hash function */
+        static int hashFunc(K key) {
             std::hash<K> hashVal;
-            return hashVal(key) % size;
+            return hashVal(key) % MAXSIZE;
         }
     
     public:
-        Hashtable(int maxSize) {
+        int (*hash)(K);
+        int getSize() {
+            return size;
+        }
+
+        Hashtable(int maxSize, int (*h)(K)) {
+            hash = h;
             size = maxSize;
             // H =  vector<list<Entry<K, V> > > (maxSize);
             H.resize(maxSize);
@@ -50,12 +57,38 @@ class Hashtable {
         Hashtable() {
             size = MAXSIZE;
             H.resize(MAXSIZE);
+            hash = hashFunc;
         }
 
         /* destructor uses clear that separately calls the destructor for each
         element of the vector */
         ~Hashtable() {
             H.clear();
+        }
+
+        Hashtable(Hashtable<K, V> &other) {
+            size = other.getSize();
+            hash = other.hash;
+            H.resize(size);
+            
+            for (int i = 0; i < size; i++){
+                for (auto entry :  other.getListIndex(i)) {
+                    H[i].push_back(entry);
+                }
+            }
+        }
+
+        Hashtable& operator=(Hashtable<K, V> &other) {
+            size = other.getSize();
+            hash = other.hash;
+            H.resize(size);
+            
+            for (int i = 0; i < size; i++){
+                for (auto entry :  other.getListIndex(i)) {
+                    H[i].push_back(entry);
+                }
+            }
+            return *this;
         }
 
         /* checks if key is in the Hashtable */
@@ -110,5 +143,9 @@ class Hashtable {
                     return entry.getValue();
                 }
             }
+        }
+
+        list<Entry<K,V> > getListIndex(int index) {
+            return H[index];
         }
 };

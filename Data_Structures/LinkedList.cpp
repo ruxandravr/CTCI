@@ -39,6 +39,10 @@ int main() {
     LinkedList<int> L3;
     L3 = L1;
     L3.print();
+    std::cout << "Testing contains....:";
+    std::cout<< "Should be false: " << L3.contains(1);
+    std::cout<< " & This should be true: "<<  L2.contains(2);
+    std::cout << "\n";
     L3.addFirst(1);
     L3.print();
     L3.removeFirst();

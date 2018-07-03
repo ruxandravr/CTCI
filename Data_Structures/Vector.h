@@ -31,12 +31,15 @@ class Vector {
             return newArray;
         }
 
+        Vector() {
+            this->capacity = this->size = 0;
+        }
+        
         /* First constructor */
         Vector(int capacity) {
             this->capacity = capacity;
             this-> size = 0;
             this-> array =  new V[capacity];
-
         }
 
         /* Second constructor */
@@ -180,5 +183,11 @@ class Vector {
 
         int getCapacity() {
             return capacity;
+        }
+
+        void resize(int capacity) {
+            this->capacity = capacity;
+            this-> size = 0;
+            this-> array =  new V[capacity];
         }
 };
