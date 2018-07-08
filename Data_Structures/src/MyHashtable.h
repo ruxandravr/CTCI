@@ -116,8 +116,8 @@ class MyHashtable {
             }
             
             /* Iterate through the LinkedList */    
-            current = H[index].getFirst();
-            last = H[index].getLast();
+            current = H[index].getFirstPtr();
+            last = H[index].getLastPtr();
             while (current != last) {
                 if (current->value.getKey() == key) {
                     return true;
@@ -139,8 +139,8 @@ class MyHashtable {
 
             /* update value if key already exists*/
             if (!H[index].isEmpty()) {
-                current = H[index].getFirst();
-                last = H[index].getLast();
+                current = H[index].getFirstPtr();
+                last = H[index].getLastPtr();
                 while (current != last) {
                     if (current->value.getKey() == key) {
                         current->value.setValue(value);
@@ -169,8 +169,8 @@ class MyHashtable {
             }
             
             /* Iterate through the LinkedList */
-            current = H[index].getFirst();
-            last = H[index].getLast();
+            current = H[index].getFirstPtr();
+            last = H[index].getLastPtr();
             while (current != last) {
                 if (current->value.getKey() == key) {
                     return current->value.getValue();
