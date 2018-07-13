@@ -8,6 +8,7 @@ template <typename V>
 class LinkedList {
     private:
         Node<V> *first, *last;
+        int size;
 
     public:
         LinkedList();
@@ -25,11 +26,13 @@ class LinkedList {
         void removeLast();
         bool contains(V value);
         bool equals(const LinkedList<V> &other);
+        int getSize();
 };
 
 template<typename V>
 LinkedList<V>::LinkedList() {
     first = last = nullptr;
+    size = 0;
 }
 
 template<typename V>
@@ -37,6 +40,7 @@ LinkedList<V>::~LinkedList() {
     while (!isEmpty()) {
         removeFirst();
     }
+    size = 0;
 }
 
 template<typename V>
@@ -62,6 +66,8 @@ LinkedList<V>::LinkedList(const LinkedList<V> &other) {
         }
         addLast(otherLast->value);
     }
+
+    size = other.size;
 }
 
 template<typename V>
@@ -77,6 +83,7 @@ LinkedList<V>& LinkedList<V>::operator=(const LinkedList<V> &other) {
         }
         addLast(otherLast->value);
     }
+    size = other.size;
     return *this;
 }
 
@@ -96,6 +103,7 @@ void LinkedList<V>::addFirst(V value) {
         first->prev = newNode;
         first = newNode;
     }
+    size++;
 }
 
 template<typename V>
@@ -109,6 +117,7 @@ void LinkedList<V>::addLast(V value) {
         last->next = newNode;
         last = newNode;
     }
+    size++;
 }
 
 template<typename V>
@@ -137,6 +146,7 @@ void LinkedList<V>::removeFirst() {
     } else {
         first = last = nullptr;
     }
+    size--;
     delete current;
 }
 
@@ -153,6 +163,7 @@ void LinkedList<V>::removeLast() {
     } else {
         first = last = nullptr;
     }
+    size--;
     delete current;
 }
 
@@ -177,6 +188,10 @@ bool LinkedList<V>::contains(V value) {
 
 template<typename V>
 bool LinkedList<V>::equals(const LinkedList<V> &other) {
+    if (size != other.size) {
+        return false;
+    }
+
     Node<V> *current = first, *otherCurrent = other.first;
     while (current != last && otherCurrent != other.last) {
         if (current->value != otherCurrent->value) {
@@ -191,6 +206,11 @@ bool LinkedList<V>::equals(const LinkedList<V> &other) {
     }
 
     return true;
+}
+
+template <typename V>
+int LinkedList<V>::getSize() {
+    return size;
 }
 
 #endif

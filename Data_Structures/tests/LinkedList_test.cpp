@@ -65,6 +65,20 @@ TEST(LinkedListTest, CopyConstructorAssignmentOperator) {
     ASSERT_EQ(true, l1.equals(l3));
 }
 
+TEST(LinkedListTest, Size) {
+    LinkedList<int> l1;
+    l1.addFirst(3);
+    l1.addLast(4);
+    l1.addFirst(5);
+    ASSERT_EQ(3, l1.getSize());
+    l1.removeFirst();
+    l1.removeLast();
+    ASSERT_EQ(1, l1.getSize());
+    l1.removeFirst();
+    l1.removeLast();
+    ASSERT_EQ(0, l1.getSize());
+}
+
 /* MORE TO COME */
 
 int main(int argc, char **argv) {

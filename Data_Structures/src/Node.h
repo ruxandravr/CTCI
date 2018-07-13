@@ -9,6 +9,7 @@ public:
     Node<V> *next;
 
     Node() = delete;
+    ~Node() = default;
     Node(V value);
     Node<V>& operator=(const Node<V> &other);
     Node(const Node<V> &other);

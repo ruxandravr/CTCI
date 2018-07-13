@@ -1,4 +1,4 @@
-#include "Hashtable.h"
+#include "Entry.h"
 
 /*  Empty implementation as the class uses templates so all the implementation
-/   goes in the header (Hashtable.h) file */
+/   goes in the header (Entry.h) file */
