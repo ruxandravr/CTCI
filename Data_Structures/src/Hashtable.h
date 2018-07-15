@@ -76,7 +76,7 @@ Hashtable<K, V>::Hashtable(Hashtable<K, V> &other) {
     size = other.getSize();
     hash = other.hash;
     H.resize(size);
-    
+
     for (int i = 0; i < size; i++){
         for (auto &entry :  other.getListAtIndex(i)) {
             H[i].push_back(entry);
@@ -89,7 +89,7 @@ Hashtable<K, V>& Hashtable<K, V>::operator=(Hashtable<K, V> &other) {
     size = other.getSize();
     hash = other.hash;
     H.resize(size);
-    
+
     for (int i = 0; i < size; i++){
         for (auto &entry :  other.getListAtIndex(i)) {
             H[i].push_back(entry);
@@ -102,7 +102,7 @@ Hashtable<K, V>& Hashtable<K, V>::operator=(Hashtable<K, V> &other) {
 template <typename K, typename V>
 bool Hashtable<K, V>::hasKey(K key) {
     int index = hash(key);
-    
+
     /* no list for key*/
     if (H[index].empty()) {
         return false;
@@ -115,7 +115,7 @@ bool Hashtable<K, V>::hasKey(K key) {
         }
     }
 
-    return false;          
+    return false;
 }
 
 
@@ -137,7 +137,7 @@ void Hashtable<K, V>::insert(K key, V value) {
     if (!found) {
         H[index].push_back(newEntry);
     }
-    
+
 }
 
 

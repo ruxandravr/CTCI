@@ -33,7 +33,7 @@ StringBuilder::~StringBuilder() {
 StringBuilder& StringBuilder::operator=(StringBuilder &other) {
     charArray.clear();
     charArray = std::vector<char>(other.size());
-    
+
     for (int i = 0; i < other.size(); ++i) {
         charArray[i] = other.charArray[i];
     }
@@ -44,7 +44,7 @@ StringBuilder& StringBuilder::operator=(StringBuilder &other) {
 /* copy constructor */
 StringBuilder::StringBuilder(StringBuilder &other) {
     charArray = std::vector<char>(other.size());
-    
+
     for (int i = 0; i < other.size(); ++i) {
         charArray[i] = other.charArray[i];
     }

@@ -45,14 +45,14 @@ template<typename V>
 Vector<V> Vector<V>::operator+(const Vector<V> &other1) {
     int size1 = other1.getSize();
     int capacity1 = other1.getCapacity();
-    
+
     Vector<V> newArray(capacity + capacity1);
     newArray.size = size + size1;
     newArray.capacity = capacity + capacity1;
 
     for (int i = 0; i < size; ++i) {
         newArray[i] = array[i];
-    } 
+    }
     for (int i = size; i < size + size1; ++i) {
         newArray[i] = other1[i - size];
     }
@@ -109,13 +109,13 @@ Vector<V>& Vector<V>::operator=(const Vector<V>& other) {
     array = new V[other.getCapacity()];
     size = other.getSize();
     capacity = other.getCapacity();
-    
+
     for (int i = 0; i < other.getSize(); ++i) {
         array[i] = other[i];
     }
-    
+
     return *this;
-}   
+}
 
 /* Insert element at the end of the vector */
 template<typename V>
@@ -133,7 +133,7 @@ void Vector<V>::pushBack(const V value) {
             array[i] = copy[i];
         }
         array[size++] = value;
-        
+
         delete[] copy;
     }
 }
@@ -239,7 +239,7 @@ bool Vector<V>::equals(const Vector<V> &other) {
     if (size != other.size) {
         return false;
     }
-    
+
     if (capacity != other.capacity) {
         return false;
     }

@@ -15,7 +15,7 @@ template <typename K, typename V>
 class MyHashtable {
 private:
     Vector<LinkedList<Entry<K, V> > > H;  // vector of lists -> chaining
-    int size; 
+    int size;
     static int hashFunc(K key);  // default hash function
 
 public:
@@ -94,15 +94,15 @@ int MyHashtable<K, V>::getSize() {
 /* checks if key is in the MyHashtable */
 template <typename K, typename V>
 bool MyHashtable<K, V>::hasKey(K key) {
-    Node<Entry<K, V> > *current, *last; 
+    Node<Entry<K, V> > *current, *last;
     int index = hash(key);
-    
+
     /* no list for key*/
     if (H[index].isEmpty()) {
         return false;
     }
-    
-    /* Iterate through the LinkedList */    
+
+    /* Iterate through the LinkedList */
     current = H[index].getFirstPtr();
     last = H[index].getLastPtr();
     while (current != last) {
@@ -115,7 +115,7 @@ bool MyHashtable<K, V>::hasKey(K key) {
         return true;
     }
 
-    return false;          
+    return false;
 }
 
 template <typename K, typename V>
@@ -149,14 +149,14 @@ void MyHashtable<K, V>::insert(K key, V value) {
 
 template <typename K, typename V>
 V MyHashtable<K, V>::get(K key) {
-    Node<Entry<K, V> > *current, *last; 
+    Node<Entry<K, V> > *current, *last;
     int index = hash(key);
-    
+
     /* no list for key */
     if (H[index].isEmpty()) {
         return V();
     }
-    
+
     /* Iterate through the LinkedList */
     current = H[index].getFirstPtr();
     last = H[index].getLastPtr();
@@ -170,7 +170,7 @@ V MyHashtable<K, V>::get(K key) {
         return current->value.getValue();
     }
 
-    return V();  
+    return V();
 }
 
 template <typename K, typename V>
