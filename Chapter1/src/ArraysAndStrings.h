@@ -35,7 +35,7 @@ public:
 
 private:
   /* Helper functions. */
-  static void markApparences(std::vector<int> &apparences, const std::string &s);
+  static void markAppearences(std::vector<int> &appearences, const std::string &s);
   static bool letterCheck(const std::string &s);
   static int compressedLength(const std::string &s);
   static void zeroRow(std::vector <std::vector<int> > &M, int row);
@@ -44,10 +44,10 @@ private:
 };
 
 /* Returns true if a string has duplicates
-   [additional data structure] */
+   [additional data structure]. */
 bool ArraysAndStrings::checkDuplicates_v1(const std::string &s)
 {
-  std::vector<bool> charApparences(26, 0);
+  std::vector<bool> charAppearences(26, 0);
   if (s.length() > 26) {
     return true;
   }
@@ -58,19 +58,19 @@ bool ArraysAndStrings::checkDuplicates_v1(const std::string &s)
       return false;
     }
 
-    if (charApparences[s[i] - 'a']) {
+    if (charAppearences[s[i] - 'a']) {
       return true;
     }
-    charApparences[s[i] - 'a'] = true;
+    charAppearences[s[i] - 'a'] = true;
   }
   return false;
 }
 
 /* Returns true if a string has duplicates
-   [bit manipulation] */
+   [bit manipulation]. */
 bool ArraysAndStrings::checkDuplicates_v2(const std::string &s)
 {
-  int charApparences = 0;
+  int charAppearences = 0;
 
   if (s.length() > 26) {
     return true;
@@ -82,45 +82,45 @@ bool ArraysAndStrings::checkDuplicates_v2(const std::string &s)
       return false;
     }
 
-    if (charApparences & (1 << (s[i] - 'a'))) {
+    if (charAppearences & (1 << (s[i] - 'a'))) {
       return true;
     }
-    charApparences ^=  (1 << (s[i] - 'a'));
+    charAppearences ^=  (1 << (s[i] - 'a'));
   }
   return false;
 }
 
 
-/*  checks if each character has the same number of apparences in each string
-    [uses additional data structure] */
+/*  Checks if each character has the same number of appearences in each string
+    [uses additional data structure]. */
 bool ArraysAndStrings::checkPermutation_v1(const std::string &s1,
     const std::string &s2)
 {
   //* count how many times a char appears in one string */
-  std::vector<int> apparences(26, 0);
+  std::vector<int> appearences(26, 0);
 
   if (s1.length() != s2.length()) {
     return false;
   }
 
   /* compute the first string */
-  markApparences(apparences, s1);
+  markAppearences(appearences, s1);
 
   /* compute the second string */
   for (int i = 0; i < s2.length(); ++i) {
-    apparences[s2[i] - 'a']--;
+    appearences[s2[i] - 'a']--;
   }
 
-  /* check equality of apparences */
+  /* check equality of appearences */
   for (int i = 0; i < 26; ++i) {
-    if (apparences[i] != 0) {
+    if (appearences[i] != 0) {
       return false;
     }
   }
   return true;
 }
 
-/* sorts both strings and verifies their equality */
+/* Sorts both strings and verifies their equality. */
 bool ArraysAndStrings::checkPermutation_v2(std::string &s1,
     std::string &s2)
 {
@@ -136,7 +136,7 @@ bool ArraysAndStrings::checkPermutation_v2(std::string &s1,
 }
 
 /*  Add multiple spaces at the end of the vector and then compute the string
-    from its end to its begining */
+    from its end to its begining. */
 std::string ArraysAndStrings::URLify(std::vector<char>& url)
 {
   int size = url.size(), newIndex;
@@ -161,70 +161,70 @@ std::string ArraysAndStrings::URLify(std::vector<char>& url)
   return std::string(url.begin(), url.end());
 }
 
-/* check how many times each character appears */
+/* Check how many times each character appears. */
 bool ArraysAndStrings::palindromePermutation_v1(std::string s)
 {
-  std::vector<int> apparences(26, 0);
-  int oddApparences = 0;
+  std::vector<int> appearences(26, 0);
+  int oddAppearences = 0;
 
   std::transform(s.begin(), s.end(), s.begin(), ::tolower);
 
   for (int i = 0; i < s.length(); ++i) {
     if (s[i] - 'a' >= 0 && s[i] - 'a' < 26) {
-      apparences[s[i] - 'a']++;
+      appearences[s[i] - 'a']++;
       /* [OPTION 1] In place check */
-      if (apparences[s[i] - 'a'] % 2) {
-        oddApparences++;
+      if (appearences[s[i] - 'a'] % 2) {
+        oddAppearences++;
       } else {
-        oddApparences--;
+        oddAppearences--;
       }
     }
   }
   /* [OPTION 2] Additional traversal of the array */
-//   for (auto charApparence : apparences) {
+//   for (auto charApparence : appearences) {
 //       if (charApparence % 2) {
-//         oddApparences++;
+//         oddAppearences++;
 //       }
 //     }
 
-  /* if the length of the array is even -> oddApparences should be 0
+  /* if the length of the array is even -> oddAppearences should be 0
   	if the length is odd -> oddAparences should be 1 */
-  return oddApparences <= 1;
+  return oddAppearences <= 1;
 
 }
 
-/* check how many times each character appears
-	[bitwise operations] */
+/* Check how many times each character appears
+  [bitwise operations]. */
 bool ArraysAndStrings::palindromePermutation_v2(std::string s)
 {
-  int apparences = 0, oddApparences = 0;
+  int appearences = 0, oddAppearences = 0;
 
   std::transform(s.begin(), s.end(), s.begin(), ::tolower);
 
   for (int i = 0; i < s.length(); ++i) {
     if (s[i] - 'a' >= 0 && s[i] - 'a' < 26) {
-      apparences ^= (1 << (s[i] - 'a'));
+      appearences ^= (1 << (s[i] - 'a'));
       /* [OPTION 1] In place check */
-      if (apparences & (1 << (s[i] - 'a'))) {
-        oddApparences++;
+      if (appearences & (1 << (s[i] - 'a'))) {
+        oddAppearences++;
       } else {
-        oddApparences--;
+        oddAppearences--;
 
       }
     }
   }
 
-  /* if the length of the array is even -> oddApparences should be 0
+  /* if the length of the array is even -> oddAppearences should be 0
   	if the length is odd -> oddAparences should be 1 */
-  return oddApparences <= 1;
+  return oddAppearences <= 1;
 
   /* using only the apparenes counter -> it should have 0 or 1 bits of 1*/
-  // return (apparences == 0) || (apparences & (apparences - 1)) == 0;
+  // return (appearences == 0) || (appearences & (appearences - 1)) == 0;
 }
 
 
-/* traverse both strings simultaneously and check the characters at the same
-  position and accept only one different character*/
+/* Traverse both strings simultaneously and check the characters at the same
+  position and accept only one different character. */
 bool ArraysAndStrings::oneAway(const std::string &s1, const std::string &s2)
 {
   int size1 = s1.length();
@@ -259,6 +259,7 @@ bool ArraysAndStrings::oneAway(const std::string &s1, const std::string &s2)
   return true;
 }
 
+/* Compress a string -> [letter][number_of_appearences]. */
 std::string ArraysAndStrings::stringCompression(const std::string &s)
 {
   // saftey check <- check if the string has only letter components
@@ -298,7 +299,7 @@ std::string ArraysAndStrings::stringCompression(const std::string &s)
          std::string(newString.begin(), newString.end());
 }
 
-/* Swap rows from exterior to interior */
+/* Swap rows from exterior to interior. */
 void ArraysAndStrings::rotateMatrix(std::vector<std::vector <int> > &M)
 {
   int n = M.size(), tmp;
@@ -325,7 +326,7 @@ void ArraysAndStrings::rotateMatrix(std::vector<std::vector <int> > &M)
 
 
 /* Traverese the matrix to check which rows and columns should be made 0 and
-	zero-ify the found ones. [uses aditional space] */
+	zero-ify the found ones. [uses aditional space]. */
 void ArraysAndStrings::zeroMatrix_v1(std::vector<std::vector <int> > &M)
 {
   /* Commented option uses extra space to memorise rows/columns to be made 0 */
@@ -369,7 +370,7 @@ void ArraysAndStrings::zeroMatrix_v1(std::vector<std::vector <int> > &M)
 }
 
 /* Use the first row to mark which columns should be made 0 and first column to
-  mark which rows should be made 0. [no additional space] */
+  mark which rows should be made 0. [no additional space]. */
 void ArraysAndStrings::zeroMatrix_v2(std::vector<std::vector <int> > &M)
 {
   bool firstRow = false;
@@ -428,31 +429,35 @@ void ArraysAndStrings::zeroMatrix_v2(std::vector<std::vector <int> > &M)
   }
 }
 
+/* Checks if s1 is a rotation of the string s1. */
 bool ArraysAndStrings::isRotation(const std::string &s1, const std::string &s2)
 {
   if (s1.length() != s2.length()) {
     return false;
   }
 
+  /* Concatenate the first string with itself and check if the second one is its
+  substring. */
   std::string doubleS1 = s1 + s1;
   return isSubstring(doubleS1, s2);
 }
 
 /* Helper functions: */
 
-/* @apparences = a vector with 26 positions corresponding to each alphabet
-  letter which countes the number of apparences of each letter in string s */
-void ArraysAndStrings::markApparences(std::vector<int> &apparences, const std::string &s)
+/* @appearences = a vector with 26 positions corresponding to each alphabet
+  letter which countes the number of appearences of each letter in string s. */
+void ArraysAndStrings::markAppearences(std::vector<int> &appearences, const std::string &s)
 {
   for (int i = 0; i < s.length(); ++i) {
     if (s[i] - 'a' < 0 || s[i] - 'a' > 26) {
       std::cerr << "Error processing string\n";
     } else {
-      apparences[s[i] - 'a']++;
+      appearences[s[i] - 'a']++;
     }
   }
 }
 
+/* Checks if a string only contains literal characters. */
 bool ArraysAndStrings::letterCheck(const std::string &s)
 {
   for (auto ch : s) {
@@ -463,7 +468,7 @@ bool ArraysAndStrings::letterCheck(const std::string &s)
   return true;
 }
 
-/* returns the length of a compressed string
+/* Returns the length of a compressed string.
    eg: "aaabbcd" -> "a3b2c1d2" -> returns 8 */
 int ArraysAndStrings::compressedLength(const std::string &s)
 {
@@ -477,6 +482,7 @@ int ArraysAndStrings::compressedLength(const std::string &s)
   return length;
 }
 
+/* Make all the elements in the given row 0. */
 void ArraysAndStrings::zeroRow(std::vector<std::vector <int> > &M, int row)
 {
   for (int i = 0; i < M[0].size(); ++i) {
@@ -484,6 +490,7 @@ void ArraysAndStrings::zeroRow(std::vector<std::vector <int> > &M, int row)
   }
 }
 
+/* Make all the elements in the given column 0. */
 void ArraysAndStrings::zeroColumn(std::vector<std::vector <int> > &M, int column)
 {
   for (int i = 0; i < M.size(); ++i) {
@@ -491,6 +498,7 @@ void ArraysAndStrings::zeroColumn(std::vector<std::vector <int> > &M, int column
   }
 }
 
+/* Checks if smallString is a substring of bigString. */
 bool ArraysAndStrings::isSubstring(const std::string &bigString,
                                    const std::string &smallString)
 {
@@ -498,6 +506,7 @@ bool ArraysAndStrings::isSubstring(const std::string &bigString,
     return false;
   }
 
+  /* Iterate through all possible substrings. */
   for (int i = 0; i < bigString.length() - smallString.length(); ++i) {
     std::string check = bigString.substr(i, smallString.length());
     if (check == smallString) {
