@@ -29,7 +29,9 @@ public:
   static bool oneAway(const std::string &s1, const std::string &s2);
   static std::string stringCompression(const std::string &s);
   static void rotateMatrix(std::vector <std::vector<int> > &M);
-  static void zeroMatrix(std::vector <std::vector<int> > &M);
+  static void zeroMatrix_v1(std::vector <std::vector<int> > &M);
+  static void zeroMatrix_v2(std::vector <std::vector<int> > &M);
+  static bool isRotation(const std::string &s, const std::string &s2);
 
 private:
   /* Helper functions. */
@@ -38,6 +40,7 @@ private:
   static int compressedLength(const std::string &s);
   static void zeroRow(std::vector <std::vector<int> > &M, int row);
   static void zeroColumn(std::vector <std::vector<int> > &M, int column);
+  static bool isSubstring(const std::string &s, const std::string &s1);
 };
 
 /* Returns true if a string has duplicates
@@ -296,49 +299,143 @@ std::string ArraysAndStrings::stringCompression(const std::string &s)
 }
 
 /* Swap rows from exterior to interior */
-void ArraysAndStrings::rotateMatrix(std::vector<std::vector <int> > &M) {
-	int n = M.size(), tmp;
+void ArraysAndStrings::rotateMatrix(std::vector<std::vector <int> > &M)
+{
+  int n = M.size(), tmp;
 
-	for (int row = 0; row < n / 2; ++row) {
-		for (int column = row; column < n - row - 1; ++column) {
-			// store the element from the upper row
-			tmp = M[row][column];
+  for (int row = 0; row < n / 2; ++row) {
+    for (int column = row; column < n - row - 1; ++column) {
+      // store the element from the upper row
+      tmp = M[row][column];
 
-			// swap upper row with left row
-			M[row][column] = M[n - column - 1][row];
+      // swap upper row with left row
+      M[row][column] = M[n - column - 1][row];
 
-			// swap left row with bottom row
-			M[n - column - 1][row] = M[n - row - 1][n - column - 1];
+      // swap left row with bottom row
+      M[n - column - 1][row] = M[n - row - 1][n - column - 1];
 
-			// swap bottom row with right row
-			M[n- row - 1][n - column - 1] = M[column][n - row - 1];
+      // swap bottom row with right row
+      M[n- row - 1][n - column - 1] = M[column][n - row - 1];
 
-			// swap right row with upper row 
-			M[column][n - row - 1] = tmp;
-		}
-	}
+      // swap right row with upper row
+      M[column][n - row - 1] = tmp;
+    }
+  }
 }
 
-void ArraysAndStrings::zeroMatrix(std::vector<std::vector <int> > &M) {
-	std::unordered_set<int> rows;
-	std::unordered_set<int> columns;
 
-	for (int i = 0; i < M.size(); ++i) {
-		for (int j = 0; j < M[0].size(); ++j) {
-			if (M[i][j] == 0) {
-				rows.insert(i);
-				columns.insert(j);
-			}
-		}
-	}
+/* Traverese the matrix to check which rows and columns should be made 0 and
+	zero-ify the found ones. [uses aditional space] */
+void ArraysAndStrings::zeroMatrix_v1(std::vector<std::vector <int> > &M)
+{
+  /* Commented option uses extra space to memorise rows/columns to be made 0 */
+  // std::unordered_set<int> rows;
+  // std::unordered_set<int> columns;
 
-	for (auto row : rows) {
-		zeroRow(M, row);
-	}
+  /* Each 1-bit of these numbers represents one row/column to be made 0 */
+  int rows = 0;
+  int columns = 0;
+  for (int i = 0; i < M.size(); ++i) {
+    for (int j = 0; j < M[0].size(); ++j) {
+      if (M[i][j] == 0) {
+        // rows.insert(i);
+        // columns.insert(j);
+        rows |= (1 << i); // mark the row
+        columns |= (1 << j);  // mark the column
+      }
+    }
+  }
 
-	for (auto column : columns) {
-		zeroColumn(M, column);
-	}
+  // for (auto row : rows) {
+  // 	zeroRow(M, row);
+  // }
+
+  // for (auto column : columns) {
+  // 	zeroColumn(M, column);
+  // }
+
+  for (int i = 0; i < M.size(); ++i) {
+    if (rows & (1 << i)) {
+      zeroRow(M, i);
+    }
+  }
+
+
+  for (int j = 0; j < M[0].size(); ++j) {
+    if (columns & (1 << j)) {
+      zeroColumn(M, j);
+    }
+  }
+}
+
+/* Use the first row to mark which columns should be made 0 and first column to
+  mark which rows should be made 0. [no additional space] */
+void ArraysAndStrings::zeroMatrix_v2(std::vector<std::vector <int> > &M)
+{
+  bool firstRow = false;
+  bool firstCol = false;
+
+  // check if first row should be made 0
+  for (int i = 0; i < M[0].size(); ++i) {
+    if (M[0][i] == 0) {
+      firstRow = true;
+      break;
+    }
+  }
+
+  // check if first column should be made 0
+  for (int i = 0; i < M.size(); ++i) {
+    if (M[i][0] == 0) {
+      firstCol = true;
+      break;
+    }
+  }
+
+  /* check the rest of the matrix */
+  for (int i = 1; i < M.size(); ++i) {
+    for (int j = 1; j < M[0].size(); ++j) {
+      if (M[i][j] == 0) {
+        M[i][0] = 0;
+        M[0][j] = 0;
+      }
+    }
+  }
+
+  /* zero-ify found rows/columns */
+  for (int i = 0; i < M[0].size(); ++i) {
+    if (M[0][i] == 0) {
+      zeroColumn(M, i);
+    }
+  }
+
+  for (int i = 0; i < M.size(); ++i) {
+    if (M[i][0] == 0) {
+      zeroRow(M, i);
+    }
+  }
+
+  /* if needed zero-ify the first row/column */
+  if (firstCol) {
+    for (int i = 0; i < M.size(); ++i) {
+      M[i][0] = 0;
+    }
+  }
+
+  if (firstRow) {
+    for (int i = 0; i < M[0].size(); ++i) {
+      M[0][i] = 0;
+    }
+  }
+}
+
+bool ArraysAndStrings::isRotation(const std::string &s1, const std::string &s2)
+{
+  if (s1.length() != s2.length()) {
+    return false;
+  }
+
+  std::string doubleS1 = s1 + s1;
+  return isSubstring(doubleS1, s2);
 }
 
 /* Helper functions: */
@@ -380,16 +477,34 @@ int ArraysAndStrings::compressedLength(const std::string &s)
   return length;
 }
 
-void ArraysAndStrings::zeroRow(std::vector<std::vector <int> > &M, int row) {
-	for (int i = 0; i < M[0].size(); ++i) {
-		M[row][i] = 0;
-	}
+void ArraysAndStrings::zeroRow(std::vector<std::vector <int> > &M, int row)
+{
+  for (int i = 0; i < M[0].size(); ++i) {
+    M[row][i] = 0;
+  }
 }
 
-void ArraysAndStrings::zeroColumn(std::vector<std::vector <int> > &M, int column) {
-	for (int i = 0; i < M.size(); ++i) {
-		M[i][column] = 0;
-	}
+void ArraysAndStrings::zeroColumn(std::vector<std::vector <int> > &M, int column)
+{
+  for (int i = 0; i < M.size(); ++i) {
+    M[i][column] = 0;
+  }
+}
+
+bool ArraysAndStrings::isSubstring(const std::string &bigString,
+                                   const std::string &smallString)
+{
+  if (smallString.length() > bigString.length()) {
+    return false;
+  }
+
+  for (int i = 0; i < bigString.length() - smallString.length(); ++i) {
+    std::string check = bigString.substr(i, smallString.length());
+    if (check == smallString) {
+      return true;
+    }
+  }
+  return false;
 }
 
 #endif

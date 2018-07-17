@@ -239,7 +239,7 @@ TEST(ArraysAndStrings, rotateMatrix)
 
 }
 
-TEST(ArraysAndStrings, zeroMatrix)
+TEST(ArraysAndStrings, zeroMatrix_v1)
 {
   std::vector<std::vector<int> > M = {{1, 0, 3, 4},
     {5, 6, 7, 8},
@@ -253,7 +253,7 @@ TEST(ArraysAndStrings, zeroMatrix)
     {0, 0, 0, 0}
   };
 
-  ArraysAndStrings::zeroMatrix(M);
+  ArraysAndStrings::zeroMatrix_v1(M);
   ASSERT_EQ(M, newM);
 
   M = {{0, 2, 3, 4, 5},
@@ -270,17 +270,83 @@ TEST(ArraysAndStrings, zeroMatrix)
     {0, 0, 0, 0, 0}
   };
 
-  ArraysAndStrings::zeroMatrix(M);
+  ArraysAndStrings::zeroMatrix_v1(M);
   ASSERT_EQ(M, newM);
 
   M = {{1, 2}, {3, 4}};
 
   newM = {{1, 2}, {3, 4}};
 
-  ArraysAndStrings::zeroMatrix(M);
+  ArraysAndStrings::zeroMatrix_v1(M);
   ASSERT_EQ(M, newM);
 
 }
+
+TEST(ArraysAndStrings, zeroMatrix_v2)
+{
+  std::vector<std::vector<int> > M = {{1, 0, 3, 4},
+    {5, 6, 7, 8},
+    {9, 10, 0, 0},
+    {13, 0, 15, 16}
+  };
+
+  std::vector<std::vector<int> > newM = {{0, 0, 0, 0},
+    {5, 0, 0, 0},
+    {0, 0, 0, 0},
+    {0, 0, 0, 0}
+  };
+
+  ArraysAndStrings::zeroMatrix_v2(M);
+  ASSERT_EQ(M, newM);
+
+  M = {{0, 2, 3, 4, 5},
+    {6, 0, 8, 9, 10},
+    {11, 12, 0, 14, 15},
+    {16, 17, 0, 11, 20},
+    {21, 22, 0, 24, 0}
+  };
+
+  newM = {{0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0}
+  };
+
+  ArraysAndStrings::zeroMatrix_v2(M);
+  ASSERT_EQ(M, newM);
+
+  M = {{1, 2}, {3, 4}};
+
+  newM = {{1, 2}, {3, 4}};
+
+  ArraysAndStrings::zeroMatrix_v2(M);
+  ASSERT_EQ(M, newM);
+}
+
+TEST(ArraysAndStrings, isRotation)
+{
+  std::string s1 = "waterbottle";
+  std::string s2 = "erbottlewat";
+
+  ASSERT_EQ(true, ArraysAndStrings::isRotation(s1, s2));
+
+  s1 = "aaaa";
+  ASSERT_EQ(true, ArraysAndStrings::isRotation(s1, s1));
+
+  s1 = "aaab";
+  s2 = "abaa";
+  ASSERT_EQ(true, ArraysAndStrings::isRotation(s1, s2));
+
+  s2 = "caaa";
+  ASSERT_EQ(false, ArraysAndStrings::isRotation(s1, s2));
+
+  s1 = "aba";
+  s2 = "abb";
+  ASSERT_EQ(false, ArraysAndStrings::isRotation(s1, s2));
+
+}
+
 int main(int argc, char **argv)
 {
   testing::InitGoogleTest(&argc, argv);
