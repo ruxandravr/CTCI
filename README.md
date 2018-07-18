@@ -1,7 +1,7 @@
 Cracking the Coding Interview book(6th Edition) implementations(C++)
 -------------------------------------------------------------------
 
-> Contains: 
+### Contains:metal:: 
   #### My own Data Structures implementations & tests
   - Vector
   - LinkedList
