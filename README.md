@@ -3,9 +3,9 @@ Cracking the Coding Interview book(6th Edition) implementations(C++)
 
 Contains: 
   #### My own Data Structures implementations & tests
-    - Vector
-    - LinkedList
-    - Hashtable
+  - Vector
+  - LinkedList
+  - Hashtable
     
   - Implementations for each Chapter Interview Questions
 
