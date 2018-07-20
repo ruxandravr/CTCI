@@ -1,6 +1,9 @@
 *.gch
 *.a
 *.cmake
+*.orig
 *CMakeFiles*
 *CMakeCache.txt
 *Makefile
+*.vscode*
+*.json

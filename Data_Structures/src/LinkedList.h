@@ -2,6 +2,7 @@
 #define CTCI_LINKED_LIST_H
 
 #include "Node.h"
+#include "Hashtable.h"
 #include <iostream>
 
 template <typename V>
@@ -28,6 +29,14 @@ public:
   bool contains(V value);
   bool equals(const LinkedList<V> &other);
   int getSize();
+
+  /* Chapter 2 functions */
+  /* Remove duplicates from a list */
+  void removeDuplicates();
+  void removeDuplicates_v2();
+
+  /* Return k-th to last element */
+  V kthToLast(int k);
 };
 
 template<typename V>
@@ -228,5 +237,83 @@ int LinkedList<V>::getSize()
 {
   return size;
 }
+
+template<typename V>
+void LinkedList<V>::removeDuplicates()
+{
+  Hashtable<V, bool> nodeMap;
+  Node<V> *current = first;
+
+  if (isEmpty() || first == last) {
+    return;
+  }
+
+  while (current->next != nullptr) {
+    if (nodeMap.hasKey(current->value)) {
+      Node<V> *tmp = current;
+      current->prev->next = current->next;
+      current->next->prev = current->prev;
+      current = current->next;
+      delete tmp;
+      size--;
+    } else {
+      nodeMap.insert(current->value, true);
+      current = current->next;
+    }
+
+  }
+}
+
+template<typename V>
+void LinkedList<V>::removeDuplicates_v2()
+{
+  Node<V> *current, *next;
+  current = first;
+
+  if (isEmpty() || first == last) {
+    return;
+  }
+
+  while (current->next != nullptr) {
+    next = current->next;
+    while (next->next != nullptr) {
+      if (next->value == current->value) {
+        Node<V> *tmp = next;
+        next->prev->next = next->next;
+        next->next->prev = next->prev;
+        next = next->next;
+        delete tmp;
+        size--;
+      } else {
+        next = next->next;
+      }
+    }
+    current = current->next;
+  }
+}
+
+/* Returns k th element to last assuming we don't know the size of the list or
+  the last pointer. */
+template<typename V>
+V LinkedList<V>::kthToLast(int k)
+{
+  Node<V> *current, *kth;
+  current = kth = first;
+
+  for (int i = 1; i < k; ++i) {
+    if (current == nullptr) {
+      std::cout << "K bigger than the list";
+      return V();
+    }
+    current = current->next;
+  }
+
+  while (current->next != nullptr) {
+    current = current->next;
+    kth = kth->next;
+  }
+  return kth->value;
+}
+
 
 #endif
