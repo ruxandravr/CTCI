@@ -1,5 +1,11 @@
 #include "ArraysAndStrings.h"
 
+#include <iostream>
+#include <string>
+#include <vector>
+#include <unordered_set>
+#include <algorithm>
+
 /* Returns true if a string has duplicates
    [additional data structure]. */
 bool ArraysAndStrings::checkDuplicates_v1(const std::string &s)

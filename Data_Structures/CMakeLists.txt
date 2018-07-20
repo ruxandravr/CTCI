@@ -13,9 +13,17 @@ add_subdirectory(src)
 add_executable(linkedListTest tests/LinkedList_test.cpp)
 target_link_libraries(linkedListTest ${GTEST_LIBRARIES} pthread LinkedListLibrary)
 
+# Link singlyLinkedListTestTests with what we want to test and the GTest and pthread library
+add_executable(singlyLinkedListTest tests/SinglyLinkedList_test.cpp)
+target_link_libraries(singlyLinkedListTest ${GTEST_LIBRARIES} pthread SinglyLinkedListLibrary)
+
 # Link nodeTestTests with what we want to test and the GTest and pthread library
 add_executable(nodeTest tests/Node_test.cpp)
 target_link_libraries(nodeTest ${GTEST_LIBRARIES} pthread NodeLibrary)
+
+# Link nodeTestTests with what we want to test and the GTest and pthread library
+add_executable(snodeTest tests/SNode_test.cpp)
+target_link_libraries(snodeTest ${GTEST_LIBRARIES} pthread SNodeLibrary)
 
 # Link entryTestTests with what we want to test and the GTest and pthread library
 add_executable(entryTest tests/Entry_test.cpp)

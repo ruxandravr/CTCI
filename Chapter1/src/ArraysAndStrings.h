@@ -1,12 +1,6 @@
 #ifndef CTCI_ARRAYS_AND_STRINGS_H
 #define CTCI_ARRAYS_AND_STRINGS_H
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <unordered_set>
-#include <algorithm>
-
 class ArraysAndStrings
 {
 public:

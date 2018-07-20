@@ -3,3 +3,4 @@
 *.cmake
 *CMakeFiles*
 *CMakeCache.txt
+*Makefile
