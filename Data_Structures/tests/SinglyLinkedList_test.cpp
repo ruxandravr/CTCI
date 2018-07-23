@@ -105,6 +105,43 @@ TEST(SinglyLinkedListTest, Size)
   ASSERT_EQ(0, l1.getSize());
 }
 
+TEST(SinglyLinkedList, GetNthNode)
+{
+  SinglyLinkedList<int> l1;
+  l1.addLast(1);
+  l1.addLast(2);
+  l1.addLast(3);
+  l1.addLast(4);
+  l1.addLast(5);
+  l1.addLast(6);
+  l1.addLast(7);
+
+  ASSERT_EQ(2, l1.getNthNode(2)->value);
+}
+
+TEST(LinkedLists, DeleteNode)
+{
+  SinglyLinkedList<int> l1;
+  l1.addFirst(6);
+  l1.addFirst(5);
+  l1.addFirst(4);
+  l1.addFirst(3);
+  l1.addFirst(2);
+  l1.addFirst(1);
+
+  SinglyLinkedList<int> l2;
+  l2.addFirst(6);
+  l2.addFirst(5);
+  l2.addFirst(3);
+  l2.addFirst(2);
+  l2.addFirst(1);
+
+  SNode<int> *n = l1.getNthNode(4);
+
+  l1.deleteNode(n);
+  ASSERT_EQ(true, l1.equals(l2));
+
+}
 /* MORE TO COME */
 
 int main(int argc, char **argv)

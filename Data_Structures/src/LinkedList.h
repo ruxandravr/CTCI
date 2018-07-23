@@ -315,5 +315,4 @@ V LinkedList<V>::kthToLast(int k)
   return kth->value;
 }
 
-
 #endif

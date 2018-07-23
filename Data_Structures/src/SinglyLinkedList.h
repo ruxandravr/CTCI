@@ -26,6 +26,11 @@ public:
   SNode<V> *getLastPtr() const;
   int getSize() const;
   bool equals(const SinglyLinkedList<V> &other);
+  void print();
+  SNode<V>* getNthNode(int n);
+
+  /* Chapter 2 functions */
+  void deleteNode(SNode<V> *n);
 
 };
 
@@ -191,5 +196,59 @@ void SinglyLinkedList<V>::removeFirst()
   size--;
 }
 
+template<typename V>
+void SinglyLinkedList<V>:: print()
+{
+  if (isEmpty()) {
+    return;
+  }
+  SNode<V> *current = first;
+  while (current != last) {
+    std::cout << current->value << " ";
+    current = current->next;
+  }
+  if(last != nullptr) {
+    std::cout << last->value;
+  }
+
+}
+
+/* Returns the n-th node from the list. */
+template<typename V>
+SNode<V>* SinglyLinkedList<V>:: getNthNode(int n)
+{
+  if (n > size) {
+    return nullptr;
+  }
+  SNode<V> *current = first;
+  int index = 1;
+  while (index < n) {
+    current = current->next;
+    index++;
+  }
+  return current;
+}
+
+/* Delete a node only by having a pointer to that node: copy the value from the
+  next node and then delete the next node. Special cases for last and second to
+  last nodes. */
+template<typename V>
+void SinglyLinkedList<V>::deleteNode(SNode<V> *n)
+{
+  if (n == nullptr || n-> next == nullptr) {
+    return;
+  }
+  SNode<V> *next = n->next;
+  n->value = next->value;
+  n->next = next->next;
+
+  /* More checks*/
+  if (next == last) {
+    last = n;
+  }
+  delete next;
+  size--;
+
+}
 #endif
 
