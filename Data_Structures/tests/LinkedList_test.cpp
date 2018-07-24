@@ -137,6 +137,55 @@ TEST(LinkedLists, KthToLast)
   ASSERT_EQ(2, l1.kthToLast(4));
 }
 
+TEST(LinkedLists, Partiton)
+{
+  LinkedList<int> l1;
+  l1.addLast(7);
+  l1.addLast(5);
+  l1.addLast(4);
+  l1.addLast(20);
+  l1.addLast(1);
+  l1.addLast(21);
+
+  l1.partition(5);
+
+  LinkedList<int> l2;
+
+  l2.addLast(4);
+  l2.addLast(1);
+  l2.addLast(21);
+  l2.addLast(7);
+  l2.addLast(5);
+  l2.addLast(20);
+
+  ASSERT_EQ(true, l1.equals(l2));
+}
+
+TEST(LinkedLists, ADD)
+{
+  LinkedList<int> l1;
+  l1.addLast(9);
+  l1.addLast(9);
+  l1.addLast(9);
+  l1.addLast(9);
+
+  LinkedList<int> l2;
+  l2.addLast(9);
+  l2.addLast(9);
+
+  LinkedList<int> result;
+  result.addLast(8);
+  result.addLast(9);
+  result.addLast(0);
+  result.addLast(0);
+  result.addLast(1);
+
+  LinkedList<int> addResult;
+  LinkedList<int>::add(l1, l2, addResult);
+
+  ASSERT_EQ(true, result.equals(addResult));
+
+}
 /* MORE TO COME */
 
 int main(int argc, char **argv)

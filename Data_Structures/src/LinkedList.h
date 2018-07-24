@@ -37,6 +37,11 @@ public:
 
   /* Return k-th to last element */
   V kthToLast(int k);
+
+  /* Partition the list by putting the smaller than a pivot elements on the left
+  and the greater or eqaul to the pivot elements  on the right. */
+  void partition(V pivot);
+  static void add(LinkedList<int> &l1, LinkedList<int> &l2, LinkedList<int> &result);
 };
 
 template<typename V>
@@ -315,4 +320,65 @@ V LinkedList<V>::kthToLast(int k)
   return kth->value;
 }
 
+
+/* Partition by traversing the list and deleting the greater or equal to the
+  pivot elements and inserting then at the back. */
+template<typename V>
+void LinkedList<V>::partition(V pivot)
+{
+  Node<V> *current = first;
+  Node<V> *end = last;
+
+  while (current->value >= pivot && current != end) {
+    V value = current->value;
+    current = current->next;
+    removeFirst();
+    addLast(value);
+  }
+
+  while (current != end) {
+    if (current->value >= pivot) {
+      addLast(current->value);
+      Node<V> *tmp = current;
+      current->prev->next = current->next;
+      current->next->prev = current->prev;
+      current = current->next;
+      delete tmp;
+      size--;
+    } else {
+      current = current->next;
+    }
+  }
+}
+
+template<typename V>
+void LinkedList<V>::add(LinkedList<int> &l1, LinkedList<int> &l2, LinkedList<int> &result)
+{
+  Node<V> *currentL1 = l1.getFirstPtr();
+  Node<V> *currentL2 = l2.getFirstPtr();
+  int accumulator = 0;
+
+  while (currentL1 != nullptr && currentL2!= nullptr) {
+    result.addLast((currentL1->value + currentL2->value + accumulator) % 10);
+    accumulator = (currentL1->value + currentL2->value + accumulator) / 10;
+    currentL1 = currentL1->next;
+    currentL2 = currentL2->next;
+  }
+
+  while (currentL1 != nullptr) {
+    result.addLast((currentL1->value + accumulator) % 10);
+    accumulator = (currentL1->value + accumulator) / 10;
+    currentL1 = currentL1->next;
+  }
+
+  while (currentL2 != nullptr) {
+    result.addLast((currentL2->value + accumulator) % 10);
+    accumulator = (currentL2->value + accumulator) / 10;
+    currentL2 = currentL2->next;
+  }
+
+  if (accumulator) {
+    result.addLast(accumulator);
+  }
+}
 #endif
