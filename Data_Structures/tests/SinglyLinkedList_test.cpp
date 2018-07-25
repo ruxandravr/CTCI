@@ -140,7 +140,41 @@ TEST(LinkedLists, DeleteNode)
 
   l1.deleteNode(n);
   ASSERT_EQ(true, l1.equals(l2));
+}
 
+TEST(SinglyLinkedList, Reverse)
+{
+  SinglyLinkedList<int> l2;
+  l2.addFirst(1);
+  l2.addFirst(2);
+  l2.addFirst(3);
+  l2.addFirst(2);
+  l2.addFirst(1);
+
+  SinglyLinkedList<int> l1;
+  l1.addLast(1);
+  l1.addLast(2);
+  l1.addLast(3);
+  l1.addLast(2);
+  l1.addLast(1);
+
+  SinglyLinkedList<int> l3 = l2.reverse();
+  ASSERT_EQ(true, l1.equals(l3));
+}
+
+TEST(SinglyLinkedList, Palindrome)
+{
+  SinglyLinkedList<int> l1;
+  l1.addLast(1);
+  l1.addLast(2);
+  l1.addLast(3);
+  l1.addLast(2);
+  l1.addLast(1);
+
+  ASSERT_EQ(true, l1.isPalindrome());
+
+  l1.addFirst(8);
+  ASSERT_EQ(false, l1.isPalindrome());
 }
 /* MORE TO COME */
 

@@ -184,6 +184,39 @@ TEST(LinkedLists, ADD)
   LinkedList<int>::add(l1, l2, addResult);
 
   ASSERT_EQ(true, result.equals(addResult));
+}
+
+TEST(LinkedList, Palindrome)
+{
+  LinkedList<int> l1;
+  l1.addLast(1);
+  l1.addLast(2);
+  l1.addLast(3);
+  l1.addLast(3);
+  l1.addLast(2);
+  l1.addLast(1);
+
+  ASSERT_EQ(true, LinkedList<int>::isPalindrome(l1));
+
+  l1.addLast(1);
+  ASSERT_EQ(false, LinkedList<int>::isPalindrome(l1));
+
+}
+
+TEST(LinkedList, Palindrome_V2)
+{
+  LinkedList<int> l1;
+  l1.addLast(1);
+  l1.addLast(2);
+  l1.addLast(3);
+  l1.addLast(3);
+  l1.addLast(2);
+  l1.addLast(1);
+
+  ASSERT_EQ(true, LinkedList<int>::isPalindrome_v2(l1));
+
+  l1.addLast(1);
+  ASSERT_EQ(false, LinkedList<int>::isPalindrome_v2(l1));
 
 }
 /* MORE TO COME */

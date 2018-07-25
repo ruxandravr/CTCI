@@ -31,6 +31,9 @@ public:
   static std::list<int> add(std::list<int> &l1, std::list<int> &l2);
   static std::list<int> add_v2(std::list<int> &l1, std::list<int> &l2);
 
+  /* Checking if a list is palindrome is found in Data_Strutures/LinkedList.h
+  and Data_Strutures/SinglyLinkedList.h */
+
 
 private:
   /* Helper functions. */

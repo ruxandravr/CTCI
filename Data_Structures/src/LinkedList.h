@@ -42,6 +42,9 @@ public:
   and the greater or eqaul to the pivot elements  on the right. */
   void partition(V pivot);
   static void add(LinkedList<int> &l1, LinkedList<int> &l2, LinkedList<int> &result);
+
+  static bool isPalindrome(LinkedList<V> l);
+  static bool isPalindrome_v2(LinkedList<V> &l);
 };
 
 template<typename V>
@@ -350,7 +353,7 @@ void LinkedList<V>::partition(V pivot)
     }
   }
 }
-
+/* Adds a number memorised as linked lists. */
 template<typename V>
 void LinkedList<V>::add(LinkedList<int> &l1, LinkedList<int> &l2, LinkedList<int> &result)
 {
@@ -381,4 +384,45 @@ void LinkedList<V>::add(LinkedList<int> &l1, LinkedList<int> &l2, LinkedList<int
     result.addLast(accumulator);
   }
 }
+
+/* Checks if a list is a palindrome by constantly comparing first and last node
+  and then deleting them until the list is empty. */
+template <typename V>
+bool LinkedList<V>::isPalindrome(LinkedList<V> l)
+{
+  if (l.isEmpty() || l.getFirstPtr() == l.getLastPtr()) {
+    return true;
+  }
+
+  while (!l.isEmpty()) {
+    if (l.getFirstPtr()->value != l.getLastPtr()->value) {
+      return false;
+    }
+    l.removeFirst();
+    l.removeLast();
+  }
+  return true;
+}
+
+/* Checks if a list is palindrome by traversing both forward and backward. */
+template <typename V>
+bool LinkedList<V>::isPalindrome_v2(LinkedList<V> &l)
+{
+  if (l.isEmpty() || l.getFirstPtr() == l.getLastPtr()) {
+    return true;
+  }
+
+  Node<V> *forward = l.getFirstPtr();
+  Node<V> *backward = l.getLastPtr();
+  while (forward != backward) {
+    if (forward->value != backward->value) {
+      return false;
+    }
+    forward = forward->next;
+    backward = backward->prev;
+  }
+  return true;
+}
+
+
 #endif

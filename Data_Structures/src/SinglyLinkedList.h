@@ -28,9 +28,11 @@ public:
   bool equals(const SinglyLinkedList<V> &other);
   void print();
   SNode<V>* getNthNode(int n);
+  SinglyLinkedList<V> reverse();
 
   /* Chapter 2 functions */
   void deleteNode(SNode<V> *n);
+  bool isPalindrome();
 
 };
 
@@ -248,7 +250,37 @@ void SinglyLinkedList<V>::deleteNode(SNode<V> *n)
   }
   delete next;
   size--;
-
 }
+
+/* Reverse the list by creating a new one. */
+template <typename V>
+SinglyLinkedList<V> SinglyLinkedList<V>::reverse()
+{
+  SinglyLinkedList<V> l;
+  if (isEmpty()) {
+    return l;
+  }
+
+  if (first == last) {
+    l.addFirst(first->value);
+  } else {
+    SNode<V> *current = first;
+    while (current != last) {
+      l.addFirst(current->value);
+      current = current->next;
+    }
+    l.addFirst(last->value);
+  }
+  return l;
+}
+
+/* Tests is a list is a palindrome by checking if it is equal to its reverse. */
+template <typename V>
+bool SinglyLinkedList<V>::isPalindrome()
+{
+  SinglyLinkedList<V> reversed = this->reverse();
+  return reversed.equals(*this);
+}
+
 #endif
 
