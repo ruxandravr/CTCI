@@ -353,7 +353,7 @@ void LinkedList<V>::partition(V pivot)
     }
   }
 }
-/* Adds a number memorised as linked lists. */
+/* Adds numbers memorised as linked lists. */
 template<typename V>
 void LinkedList<V>::add(LinkedList<int> &l1, LinkedList<int> &l2, LinkedList<int> &result)
 {

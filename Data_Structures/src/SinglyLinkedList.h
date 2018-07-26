@@ -33,6 +33,8 @@ public:
   /* Chapter 2 functions */
   void deleteNode(SNode<V> *n);
   bool isPalindrome();
+  static bool intersect(SinglyLinkedList<V> l1, SinglyLinkedList<V> l2,
+                        SNode<V> &intersection);
 
 };
 
@@ -69,6 +71,7 @@ SinglyLinkedList<V>::SinglyLinkedList(const SinglyLinkedList<V> &other)
       addLast(otherfirst->value);
       otherfirst = otherfirst->next;
     }
+    addLast(other.getLastPtr()->value);
   }
   size = other.size;
 }
@@ -83,6 +86,7 @@ SinglyLinkedList<V>& SinglyLinkedList<V>::operator=(const SinglyLinkedList<V> &o
       addLast(otherfirst->value);
       otherfirst = otherfirst->next;
     }
+    addLast(other.getLastPtr()->value);
   }
   size = other.size;
   return *this;
@@ -105,7 +109,7 @@ bool SinglyLinkedList<V>::equals(const SinglyLinkedList<V> &other)
       current = current->next;
     }
   }
-  return true;
+  return other.getLastPtr()->value == last->value;
 }
 
 template<typename V>
@@ -280,6 +284,43 @@ bool SinglyLinkedList<V>::isPalindrome()
 {
   SinglyLinkedList<V> reversed = this->reverse();
   return reversed.equals(*this);
+}
+
+/* Determine if 2 lists intersect (have an element whose reference is the same)*/
+template <typename V>
+bool SinglyLinkedList<V>::intersect(SinglyLinkedList<V> l1, SinglyLinkedList<V> l2,
+                                    SNode<V> &intersection)
+{
+  if (l1.isEmpty() || l2.isEmpty()) return false;
+
+  /* Intersecting lists should point to the same end node. */
+  if (l1.getLastPtr() != l2.getLastPtr()) return false;
+
+  SNode<V> *currentL1 = l1.getFirstPtr();
+  SNode<V> *currentL2 = l2.getFirstPtr();
+
+  if (l1.getSize() < l2.getSize()) {
+    for (int i = 0; i < l2.getSize() - l1.getSize(); ++i) {
+      currentL1 = currentL1->next;
+    }
+  }
+
+  if (l2.getSize() < l1.getSize()) {
+    for (int i = 0; i < l1.getSize() - l2.getSize(); ++i) {
+      currentL2 = currentL2->next;
+    }
+  }
+
+  while (currentL1 != nullptr || currentL2 != nullptr) {
+    if (currentL1 == currentL2) {
+      // intersection = currentL1;
+      return true;
+    }
+    currentL1 = currentL1->next;
+    currentL2 = currentL2->next;
+  }
+
+  return true;
 }
 
 #endif

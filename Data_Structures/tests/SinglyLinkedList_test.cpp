@@ -176,6 +176,13 @@ TEST(SinglyLinkedList, Palindrome)
   l1.addFirst(8);
   ASSERT_EQ(false, l1.isPalindrome());
 }
+
+TEST(SinglyLinkedList, Intersect)
+{
+  // TODO
+  /* Don't know how.*/
+}
+
 /* MORE TO COME */
 
 int main(int argc, char **argv)

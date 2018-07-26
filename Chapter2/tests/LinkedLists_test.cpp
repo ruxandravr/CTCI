@@ -62,7 +62,18 @@ TEST(LinkedLists, add_v2)
   ASSERT_EQ(result, addResult);
 }
 
+TEST(LinkedLists, Intersect)
+{
+  std::list<int> l1 = {1, 4, 5, 5, 3, 2, 9, 432, 43};
+  std::list<int> l2 = {10, 11, 12, 13, 14, 15};
+  std::list<int> l3 = {5, 4, 3, 2, 1};
 
+  ASSERT_EQ(true, LinkedLists<int>::intersect(l1, l3));
+  ASSERT_EQ(false, LinkedLists<int>::intersect(l1, l2));
+  ASSERT_EQ(false, LinkedLists<int>::intersect(l3, l2));
+
+
+}
 int main(int argc, char **argv)
 {
   testing::InitGoogleTest(&argc, argv);

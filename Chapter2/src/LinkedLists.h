@@ -34,6 +34,11 @@ public:
   /* Checking if a list is palindrome is found in Data_Strutures/LinkedList.h
   and Data_Strutures/SinglyLinkedList.h */
 
+  static bool intersect(const std::list<V> &l1, const std::list<V> &l2);
+
+  /* Intersect and loop functions can be found in Data_Strutures/SNode.h and
+  Data_Strutures/SinglyLinkedList.h */
+
 
 private:
   /* Helper functions. */
@@ -186,4 +191,25 @@ std::list<int> LinkedLists<V>::add_v2(std::list<int> &l1, std::list<int> &l2)
 
   return result;
 }
+
+/* Determine first common value of two lists by using a hastable. */
+template <typename V>
+bool LinkedLists<V>::intersect(const std::list<V> &l1, const std::list<V> &l2)
+{
+  std::unordered_map<V, bool> listMap;
+
+  for (auto &elem : l1) {
+    if (listMap.find(elem) == listMap.end()) {
+      listMap[elem] = true;;
+    }
+  }
+
+  for (auto &elem : l2) {
+    if (listMap.find(elem) != listMap.end()) {
+      return true;
+    }
+  }
+  return false;
+}
+
 #endif
