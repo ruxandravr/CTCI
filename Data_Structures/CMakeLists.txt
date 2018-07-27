@@ -40,3 +40,11 @@ target_link_libraries(hashtableTest ${GTEST_LIBRARIES} pthread HashtableLibrary)
 # Link myhashtableTestTests with what we want to test and the GTest and pthread library
 add_executable(myhashtableTest tests/MyHashtable_test.cpp)
 target_link_libraries(myhashtableTest ${GTEST_LIBRARIES} pthread MyHashtableLibrary)
+
+# Link stackTestTests with what we want to test and the GTest and pthread library
+add_executable(stackTest tests/Stack_test.cpp)
+target_link_libraries(stackTest ${GTEST_LIBRARIES} pthread StackLibrary)
+
+# Link ququeTestTests with what we want to test and the GTest and pthread library
+add_executable(queueTest tests/Queue_test.cpp)
+target_link_libraries(queueTest ${GTEST_LIBRARIES} pthread QueueLibrary)
