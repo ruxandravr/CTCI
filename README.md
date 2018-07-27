@@ -6,6 +6,8 @@ Cracking the Coding Interview book(6th Edition) implementations(C++)
   - Vector
   - LinkedList
   - Hashtable
+  - Stack
+  - Queue
     
   #### Implementations for each Chapter Interview Questions
   - [x] Chapter 1 - **Arrays and Strings**
