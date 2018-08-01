@@ -4,6 +4,54 @@
 #include <vector>
 #include "../../Data_Structures/src/LinkedList.h"
 
+/* Implementation of a stack as a LinkedList because we keep track of the bottom
+    element as well. */
+template<typename V>
+class StackWithBottom : public LinkedList<V>
+{
+public:
+  void push(V value);
+  bool pop();
+  bool pop_bottom();
+  V top();
+  V bottom();
+};
+
+template <typename V>
+void StackWithBottom<V>::push(V value)
+{
+  LinkedList<V>::addFirst(value);
+}
+
+template <typename V>
+bool StackWithBottom<V>::pop()
+{
+  bool result = LinkedList<V>::isEmpty();
+  LinkedList<V>::removeFirst();
+  return !result;
+}
+template <typename V>
+bool StackWithBottom<V>::pop_bottom()
+{
+  bool result = LinkedList<V>::isEmpty();
+  LinkedList<V>::removeLast();
+  return !result;
+}
+
+template <typename V>
+V StackWithBottom<V>::top()
+{
+  V result = LinkedList<V>::getFirstPtr()->value;
+  return result;
+}
+
+template <typename V>
+V StackWithBottom<V>::bottom()
+{
+  V result = LinkedList<V>::getLastPtr()->value;
+  return result;
+}
+
 /* Implement a stack like a set of stacks with a maximum size. Because we don't
   know the size of each stack, we use a vector of sizes. */
 template <typename V>
@@ -122,54 +170,6 @@ void SetOfStacks<V>::print()
     std::cout << "Stack: " << i << ": ";
     stacks[i].print();
   }
-}
-
-/* Implementation of a stack as a LinkedList because we keep track of the bottom
-    element as well. */
-template<typename V>
-class StackWithBottom : public LinkedList<V>
-{
-public:
-  void push(V value);
-  bool pop();
-  bool pop_bottom();
-  V top();
-  V bottom();
-};
-
-template <typename V>
-void StackWithBottom<V>::push(V value)
-{
-  LinkedList<V>::addFirst(value);
-}
-
-template <typename V>
-bool StackWithBottom<V>::pop()
-{
-  bool result = LinkedList<V>::isEmpty();
-  LinkedList<V>::removeFirst();
-  return !result;
-}
-template <typename V>
-bool StackWithBottom<V>::pop_bottom()
-{
-  bool result = LinkedList<V>::isEmpty();
-  LinkedList<V>::removeLast();
-  return !result;
-}
-
-template <typename V>
-V StackWithBottom<V>::top()
-{
-  V result = LinkedList<V>::getFirstPtr()->value;
-  return result;
-}
-
-template <typename V>
-V StackWithBottom<V>::bottom()
-{
-  V result = LinkedList<V>::getLastPtr()->value;
-  return result;
 }
 
 

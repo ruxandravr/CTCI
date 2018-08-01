@@ -32,3 +32,11 @@ target_link_libraries(SetOfStacksTest ${GTEST_LIBRARIES} pthread SetOfStacksLibr
 # Link SetOfStacks_v2TestTests with what we want to test and the GTest and pthread library
 add_executable(SetOfStacks_v2Test tests/SetOfStacks_v2_test.cpp)
 target_link_libraries(SetOfStacks_v2Test ${GTEST_LIBRARIES} pthread SetOfStacks_v2Library)
+
+# Link QueueWithStacksTestTests with what we want to test and the GTest and pthread library
+add_executable(QueueWithStacksTest tests/QueueWithStacks_test.cpp)
+target_link_libraries(QueueWithStacksTest ${GTEST_LIBRARIES} pthread QueueWithStacksLibrary)
+
+# Link QueueWithStacksTestTests with what we want to test and the GTest and pthread library
+add_executable(SortedStackTest tests/SortedStack_test.cpp)
+target_link_libraries(SortedStackTest ${GTEST_LIBRARIES} pthread SortedStackLibrary)
