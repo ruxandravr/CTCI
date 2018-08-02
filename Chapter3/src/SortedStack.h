@@ -16,7 +16,7 @@ public:
   V top();
   bool isEmpty();
   void print();
-  void sortStack(Stack<V> &s);
+  static Stack<V> sortStack(Stack<V> s);
 };
 
 template <typename V>
@@ -61,10 +61,32 @@ void SortedStack<V>::print()
   sorted.print();
 }
 
+
+/* Sort a given stack by poping one element at a time from the stack and introducing
+it in a new stack at a correct position. */
 template <typename V>
-void SortedStack<V>::sortStack(Stack<V> &s)
+Stack<V> SortedStack<V>::sortStack(Stack<V> s)
 {
-  Stack<V> temporary;
+  Stack<V> newStack;
+
+  if (s.isEmpty()) {
+    return s;
+  }
+
+  newStack.push(s.top());
+  s.pop();
+
+  while (!s.isEmpty()) {
+    V tmp = s.top();
+    s.pop();
+
+    while (!newStack.isEmpty() && newStack.top() < tmp) {
+      s.push(newStack.top());
+      newStack.pop();
+    }
+    newStack.push(tmp);
+  }
+  return newStack;
 }
 
 #endif
