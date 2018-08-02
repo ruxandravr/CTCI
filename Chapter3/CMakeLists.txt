@@ -40,3 +40,8 @@ target_link_libraries(QueueWithStacksTest ${GTEST_LIBRARIES} pthread QueueWithSt
 # Link QueueWithStacksTestTests with what we want to test and the GTest and pthread library
 add_executable(SortedStackTest tests/SortedStack_test.cpp)
 target_link_libraries(SortedStackTest ${GTEST_LIBRARIES} pthread SortedStackLibrary)
+
+
+# Link AnimalShelterTestTests with what we want to test and the GTest and pthread library
+add_executable(AnimalShelterTest tests/AnimalShelter_test.cpp)
+target_link_libraries(AnimalShelterTest ${GTEST_LIBRARIES} pthread AnimalShelterLibrary)

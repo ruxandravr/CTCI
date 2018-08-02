@@ -9,4 +9,5 @@ add_library(SetOfStacks_v2Library SetOfStacks_v2.cpp)
 add_library(QueueWithStacksLibrary QueueWithStacks.cpp)
 add_library(SortedStackLibrary SortedStack.cpp)
 
+add_library(AnimalShelterLibrary AnimalShelter.cpp)
 
