@@ -48,3 +48,7 @@ target_link_libraries(stackTest ${GTEST_LIBRARIES} pthread StackLibrary)
 # Link ququeTestTests with what we want to test and the GTest and pthread library
 add_executable(queueTest tests/Queue_test.cpp)
 target_link_libraries(queueTest ${GTEST_LIBRARIES} pthread QueueLibrary)
+
+# Link binarySearchTreeTestTests with what we want to test and the GTest and pthread library
+add_executable(binarySearchTreeTest tests/BinarySearchTree_test.cpp)
+target_link_libraries(binarySearchTreeTest ${GTEST_LIBRARIES} pthread BinarySearchTreeLibrary)
