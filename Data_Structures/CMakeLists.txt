@@ -52,3 +52,7 @@ target_link_libraries(queueTest ${GTEST_LIBRARIES} pthread QueueLibrary)
 # Link binarySearchTreeTestTests with what we want to test and the GTest and pthread library
 add_executable(binarySearchTreeTest tests/BinarySearchTree_test.cpp)
 target_link_libraries(binarySearchTreeTest ${GTEST_LIBRARIES} pthread BinarySearchTreeLibrary)
+
+# Link minHeapTestTests with what we want to test and the GTest and pthread library
+add_executable(minHeapTest tests/MinHeap_test.cpp)
+target_link_libraries(minHeapTest ${GTEST_LIBRARIES} pthread MinHeapLibrary)

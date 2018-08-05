@@ -9,16 +9,16 @@ class BinarySearchTree
 private:
   V value;
   BinarySearchTree<V> *left, *right, *parent;
+  bool hasValue;  
 
 public:
   BinarySearchTree();
   BinarySearchTree(V value);
-  // ~BinarySearchTree();
+  ~BinarySearchTree();
   void insert(V value);
   BinarySearchTree* searchValue(V value);
   void deleteSelf();
   bool deleteNodeWithValue(V value);
-  bool hasValue;
   void inorder();
   V getValue();
 };
@@ -28,6 +28,17 @@ BinarySearchTree<V>::BinarySearchTree()
 {
   left = right = parent = nullptr;
   hasValue = false;
+}
+
+template <typename V>
+BinarySearchTree<V>::~BinarySearchTree()
+{
+  while (left != nullptr) {
+    left->deleteSelf();
+  }
+  while (right != nullptr) {
+    right->deleteSelf();
+  }
 }
 
 template <typename V>
@@ -88,24 +99,31 @@ BinarySearchTree<V>* BinarySearchTree<V>::searchValue(V value)
   return nullptr;
 }
 
+/* Replace a node with its inorder predecesor and delete that node. */
 template <typename V>
 void BinarySearchTree<V>::deleteSelf()
 {
   BinarySearchTree<V> *following = this;
+  /* If it is a leaf */
   if (left == nullptr && right == nullptr) {
+    /* left child*/
     if (this == parent->left) {
       parent->left = nullptr;
     } else if (this == parent->right) {
+      /* right child */
       parent->right = nullptr;
     }
     delete this;
+    /* if it has children */
   } else {
     if (left != nullptr) {
+      /* if it has left child, get to the rightmost */
       following = left;
       while (following->right != nullptr) {
         following = following->right;
       }
     } else {
+      /* if it has right child, get to the leftmost */
       following = right;
       while (following->left != nullptr) {
         following = following->left;
