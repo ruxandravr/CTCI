@@ -56,3 +56,7 @@ target_link_libraries(binarySearchTreeTest ${GTEST_LIBRARIES} pthread BinarySear
 # Link minHeapTestTests with what we want to test and the GTest and pthread library
 add_executable(minHeapTest tests/MinHeap_test.cpp)
 target_link_libraries(minHeapTest ${GTEST_LIBRARIES} pthread MinHeapLibrary)
+
+# Link trieTestTests with what we want to test and the GTest and pthread library
+add_executable(trieTest tests/Trie_test.cpp)
+target_link_libraries(trieTest ${GTEST_LIBRARIES} pthread TrieLibrary)
