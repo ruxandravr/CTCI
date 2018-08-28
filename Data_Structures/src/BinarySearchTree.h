@@ -3,6 +3,9 @@
 
 #include <iostream>
 #include <vector>
+#include <list>
+#include <unordered_map>
+#include <string>
 
 template <typename V>
 class BinarySearchTree
@@ -12,17 +15,23 @@ private:
   BinarySearchTree<V> *left, *right, *parent;
   bool hasValue;
   bool visited;
-  std::vector<BinarySearchTree<V>*> nodesTraversal;
+  std::vector<BinarySearchTree<V>*> nodesTraversal;  // inorder vector of nodes
+
+  /* Chapter 4 members */
+  std::unordered_map<BinarySearchTree<V>*, std::unordered_map<BinarySearchTree<V>*, bool>> map;
+  std::unordered_map<int, int> sums;
 
   /* Chapter 4 functions */
   std::vector<std::vector<V> > heightsList;
   int checkNodeBalance(int &hl, int &hr);
-
+  int totalSumPathsHelper(int targetSum, int current, std::unordered_map<int, int> &sums);
 
 public:
   BinarySearchTree();
   BinarySearchTree(V value);
   ~BinarySearchTree();
+  BinarySearchTree<V>* getRoot();
+
   void insert(V value);
   BinarySearchTree* searchValue(V value);
   void deleteSelf();
@@ -41,6 +50,26 @@ public:
   int heightHelper();
   bool validateBST(V &min, V &max);
   BinarySearchTree<V>* succesor(BinarySearchTree<V> *node);
+  int nodeHeight(BinarySearchTree<V> *node);
+  BinarySearchTree<V>* firstCommonAncestor(BinarySearchTree<V> *node1,
+      BinarySearchTree<V> *node2);
+  bool contains(BinarySearchTree<V> *node);
+  BinarySearchTree<V>* firstCommonAncestor_v2(BinarySearchTree<V> *node1,
+      BinarySearchTree<V> *node2);
+  std::vector<BinarySearchTree<V>* > pathTo(BinarySearchTree<V> *node);
+  void weave(std::list<V> &first, std::list<V> &second, std::vector<std::list<V> > &results,
+             std::list<V> &result);
+  void add(std::list<V> &result, std::list<V> other);
+  std::vector<std::list <V> > BSTsequence();
+  void preorder(std::string &traversal);
+  static bool isSubtree(BinarySearchTree<V> *t1, BinarySearchTree<V> *t2);
+  bool isIdentical(BinarySearchTree<V> *tree);
+  static bool isSubtree_v2(BinarySearchTree<V> *t1, BinarySearchTree<V> *t2);
+  int totalSumPaths(int targetSum);
+  int totalSumPaths_v2(int targetSum);
+  int sumPath(int targetSum, int currentSum);
+
+
 };
 
 /* Constructor */
@@ -77,6 +106,12 @@ template <typename V>
 V BinarySearchTree<V>::getValue()
 {
   return value;
+}
+
+template <typename V>
+BinarySearchTree<V>* BinarySearchTree<V>::getRoot()
+{
+  return this;
 }
 
 /* Insert a node in the tree */
@@ -410,4 +445,375 @@ BinarySearchTree<V>* BinarySearchTree<V>::succesor(BinarySearchTree<V> *node)
   return next;
 }
 
+
+/* Computes the height of a node by going up to the root. */
+template <typename V>
+int BinarySearchTree<V>::nodeHeight(BinarySearchTree<V> *node)
+{
+  int height = 0;
+  while (node->parent != nullptr) {
+    node = node->parent;
+    height++;
+  }
+  return height;
+}
+
+/* Computes the first common ancestor by verifying the height of each node,
+bringing the nodes to the same height, and gradually going up with each node
+until finding a common parent. */
+template<typename V>
+BinarySearchTree<V>* BinarySearchTree<V>::firstCommonAncestor
+(BinarySearchTree<V> *node1,BinarySearchTree<V> *node2)
+{
+  int height1 = nodeHeight(node1);
+  int height2 = nodeHeight(node2);
+
+  if (height1 >  height2) {
+    for (int i = 0; i < height1 - height2; ++i) {
+      node1 = node1->parent;
+    }
+  } else if (height2 >  height1) {
+    for (int i = 0; i < height2 - height1; ++i) {
+      node2 = node2->parent;
+    }
+  }
+
+  while (node1->parent != node2->parent) {
+    node1 = node1->parent;
+    node2 = node2->parent;
+  }
+
+  return node1->parent;
+}
+
+/* Verify if a tree contains a given node. */
+template <typename V>
+bool BinarySearchTree<V>::contains(BinarySearchTree<V> *node)
+{
+  if (this == nullptr) {
+    return false;
+  }
+  /* Use a map of maps to store each node contained in a tree. */
+  if (map.find(this) != map.end()) {
+    if (map[this].find(node) != map[this].end()) {
+      return true;
+    }
+  }
+  if (this == node) {
+    map[this][node] = true;
+    return true;
+  }
+
+  return (right->contains(node) || left->contains(node));
+}
+
+/* Compute the first common ancestor by verifying if the nodes are on different
+sides -> fca = root, or recursively verifying for the left subtree or right subtree. */
+template <typename V>
+BinarySearchTree<V>* BinarySearchTree<V>::firstCommonAncestor_v2
+(BinarySearchTree<V> *node1, BinarySearchTree<V> *node2)
+{
+  if (!contains(node1) || !contains(node2)) {
+    return nullptr;
+  }
+  if ((left->contains(node1) && right->contains(node2)) ||
+      (right->contains(node2) && left->contains(node1)))
+    return this;
+
+  if (left->contains(node1) && left->contains(node2)) {
+    if (left == node1 || left == node2) {
+      return this;
+    }
+    return left->firstCommonAncestor_v2(node1, node2);
+  }
+
+  if (right->contains(node1) && right->contains(node2)) {
+    if (right == node1 || right == node2) {
+      return this;
+    }
+    return right->firstCommonAncestor_v2(node1, node2);
+  }
+}
+
+/* Function which returns a vector with the path to a given node (from root
+to that node). */
+template <typename V>
+std::vector<BinarySearchTree<V>* > BinarySearchTree<V>::pathTo(BinarySearchTree<V> *node)
+{
+  std::vector<BinarySearchTree<V>* > empty;  // initially the path is empty
+  if (this == nullptr) return empty;
+
+  /* We reached the node, so we add it to the path. */
+  if (this->value == node->value) {
+    std::vector<BinarySearchTree<V>* > found = {node};
+    return found;
+  }
+
+  /* In an upper node, check if the node was found in left or right subtree
+  and add current element to the path. */
+  std::vector<BinarySearchTree<V>* > leftPath = left->pathTo(node);
+  std::vector<BinarySearchTree<V>* > rightPath = right->pathTo(node);
+
+  if (leftPath.size() != 0) {
+    leftPath.push_back(this);
+    return leftPath;
+  }
+
+  if (rightPath.size() != 0) {
+    rightPath.push_back(this);
+    return rightPath;
+  }
+
+  return empty;
+}
+
+/* Function that combines two list of elements into a list of lists by keeping
+the order of each element in the initial lists. */
+template <typename V>
+void  BinarySearchTree<V>::weave(std::list<V> &first, std::list <V> &second,
+                                 std::vector<std::list<V> > &results, std::list<V> &result)
+{
+  /* If one of the initial lists is now empty, the other can be added to the
+  current resulting list. */
+  if (first.empty() || second.empty()) {
+    std::list<V> solution = result;
+    add(solution, first);
+    add(solution, second);
+    /* When we completed a list, we added to the result list of lists. */
+    results.push_back(solution);
+    return;
+  }
+
+  /* Take elements from the first list. */
+  V firstElem = first.front();
+  first.pop_front();
+  result.push_back(firstElem);
+  /* Continue recursing. */
+  weave(first, second, results, result);
+  /* Undo the changes. */
+  first.push_front(firstElem);
+  result.pop_back();
+
+
+  /* Take elements from the first list. */
+  V secondElem = second.front();
+  second.pop_front();
+  result.push_back(secondElem);
+  /* Continue recursing. */
+  weave(first, second, results, result);
+  /* Undo the changes. */
+  second.push_front(secondElem);
+  result.pop_back();
+}
+
+/* Adds the element from other list to result list without changing other list. */
+template <typename V>
+void BinarySearchTree<V>::add(std::list<V> &result, std::list<V> other)
+{
+  while (!other.empty()) {
+    result.push_back(other.front());
+    other.pop_front();
+  }
+}
+
+/* Generate all posbile sequences that led to this BST. One possible sequence
+is represented as a list, and all lists go into a vector. A correct sequence
+has on the first postion the root of the tree, and on next position the root
+of the left or right subtree (their order isn't important), and so on... */
+template <typename V>
+std::vector<std::list <V> > BinarySearchTree<V>::BSTsequence()
+{
+  std::vector <std::list<V> > result;
+  /* If we get to a null node, we return the vector with an empty list. */
+  if (this == nullptr) {
+    std::list<V> emptyList;
+    result.push_back(emptyList);
+    return result;
+  }
+
+  /* Find all possible sequences for the subtrees. */
+  std::vector <std::list<V> > leftList = left->BSTsequence();
+  std::vector <std::list<V> > rightList = right->BSTsequence();
+
+  /* Combine each two lists from left and right subtree beacuse their order
+  doesn't matter in obtaining a correct sequence. */
+  for (auto llist : leftList) {
+    for (auto rlist : rightList) {
+      /* each list should have on the first position the current element (the
+      root).*/
+      std::list<V> root = {this->value};
+      std::vector<std::list<V> > weaved;
+      weave(llist, rlist, weaved, root);
+      /* Push the resulting weaved list to the result vector. */
+      while (!weaved.empty()) {
+        result.push_back(weaved[weaved.size() - 1]);
+        weaved.pop_back();
+      }
+    }
+  }
+  return result;
+}
+
+/* Store the preorder traversal of a BST in a string by marking the null nodes
+with letter N. */
+template <typename V>
+void BinarySearchTree<V>::preorder(std::string &traversal)
+{
+  if (this == nullptr) {
+    traversal += "N";
+    return;
+  }
+  traversal += std::to_string(this->value);
+  left->preorder(traversal);
+  right->preorder(traversal);
+}
+
+/* Check if t2 is a subtree of t1. */
+template <typename V>
+bool BinarySearchTree<V>::isSubtree(BinarySearchTree<V> *t1, BinarySearchTree<V> *t2)
+{
+  if (t1 == nullptr || t2 == nullptr) {
+    return false;
+  }
+
+  /* Preorder traverese both trees. */
+  std::string traversal1 = "", traversal2 = "";
+  t1->preorder(traversal1);
+  t2->preorder(traversal2);
+
+  /* Check if the second traversal is a substring of the first. */
+  return traversal1.find(traversal2) != std::string::npos;
+}
+
+/* Check if this tree is identical to a given one. */
+template <typename V>
+bool BinarySearchTree<V>::isIdentical(BinarySearchTree<V> *tree)
+{
+  /* They are both null. */
+  if (this == nullptr && tree == nullptr) {
+    return true;
+  }
+
+  /* Only one of them is null. */
+  if ((this == nullptr && tree != nullptr) || (tree == nullptr && this != nullptr)) {
+    return false;
+  }
+
+  /* They have different root values. */
+  if (this->value != tree->value) {
+    return false;
+  }
+
+  /* Verify their subtrees. */
+  return left->isIdentical(tree->left) && right->isIdentical(tree->right);
+}
+
+/* Check if t2 is a subtree of t1. */
+template <typename V>
+bool BinarySearchTree<V>::isSubtree_v2(BinarySearchTree<V> *t1, BinarySearchTree<V> *t2)
+{
+  if (t1 == nullptr && t2 == nullptr) {
+    return true;
+  }
+
+  if ((t1 == nullptr && t2 != nullptr) || (t2 == nullptr && t1 != nullptr)) {
+    return false;
+  }
+
+  /* When root values match, check if t2 is identical to the subtree of the t1
+  root.*/
+  if (t1->value == t2->value) {
+    if (t1->isIdentical(t2))
+      return true;
+  }
+
+  return isSubtree_v2(t1->left, t2) || isSubtree(t1->right, t2);
+}
+
+/* Check how many paths that start from the root are equal to targetSum. */
+template <typename V>
+int BinarySearchTree<V>::sumPath(int targetSum, int currentSum)
+{
+  /* Null node -> sum is 0 -> 0 paths. */
+  if (this == nullptr) {
+    return 0;
+  }
+
+  /* Current sum is the sum of all nodes till this node. */
+  int sumsNumber = 0;
+  currentSum += this->value;
+  /* If we find the sum we found a new path. */
+  if (currentSum == targetSum) {
+    sumsNumber++;
+  }
+
+  /* Return the number of paths found till this node + number of paths found
+  in subtrees. */
+  return sumsNumber + left->sumPath(targetSum, currentSum) + right->sumPath(targetSum, currentSum);
+}
+
+/* Check how many paths in a tree (that start from any node) are equal to
+targetSum. */
+template <typename V>
+int BinarySearchTree<V>::totalSumPaths(int targetSum)
+{
+  /* Null node -> sum is 0 -> 0 paths. */
+  if (this == nullptr) {
+    return 0;
+  }
+
+  /* Check the number of paths from the root. */
+  int pathsFromRoot = sumPath(targetSum, 0);
+
+  /* Check the number of paths from the subtrees (left/right child is the new root). */
+  int pathsLeft = left->totalSumPaths(targetSum);
+  int pathsRight = right->totalSumPaths(targetSum);
+
+  return pathsFromRoot + pathsLeft + pathsRight;
+
+}
+
+/* Check how many paths in a tree (that start from any node) are equal to
+targetSum by visiting each node only once and storing in a hastable all
+sums found. */
+template <typename V>
+int BinarySearchTree<V>::totalSumPaths_v2(int targetSum)
+{
+  sums = std::unordered_map<int, int>();
+  return totalSumPathsHelper(targetSum, 0, sums);
+}
+
+/* The hashtable stores for each sum found in the tree the number of apparitions
+of that sum. */
+template <typename V>
+int BinarySearchTree<V>::totalSumPathsHelper(int targetSum, int currentSum, std::unordered_map<int, int> &sums)
+{
+  if (this == nullptr) {
+    return 0;
+  }
+
+  /* Update the sum of the nodes until this current node. */
+  currentSum += this->value;
+
+  /* If we previous encountered a sum that is different from the current sum
+  with the targetSum, than we found a good path.*/
+  int totalPaths = (sums.find(currentSum - targetSum) != sums.end())? sums[currentSum - targetSum] : 0;
+
+  /* Update the hasthable with the current sum. */
+  if (sums.find(currentSum) != sums.end()) {
+    sums[currentSum] = sums[currentSum] + 1;
+  } else {
+    sums[currentSum] = 1;
+  }
+
+  /* If the current sum is equal to the target sum, we have found another path. */
+  if (currentSum == targetSum) {
+    totalPaths++;
+  }
+
+  /* Calculate the total paths for both subtrees. */
+  totalPaths += left->totalSumPathsHelper(targetSum, currentSum, sums);
+  totalPaths += right->totalSumPathsHelper(targetSum, currentSum, sums);
+  return totalPaths;
+}
 #endif

@@ -135,8 +135,9 @@ void MinHeap<V>::print()
 }
 
 template <typename V>
-std::vector<V> MinHeap<V>::getHeap() {
-    return heap;
+std::vector<V> MinHeap<V>::getHeap()
+{
+  return heap;
 }
 
 #endif

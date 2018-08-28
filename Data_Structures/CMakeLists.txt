@@ -60,3 +60,7 @@ target_link_libraries(minHeapTest ${GTEST_LIBRARIES} pthread MinHeapLibrary)
 # Link trieTestTests with what we want to test and the GTest and pthread library
 add_executable(trieTest tests/Trie_test.cpp)
 target_link_libraries(trieTest ${GTEST_LIBRARIES} pthread TrieLibrary)
+
+# Link RandomBinaryTree with what we want to test and the GTest and pthread library
+add_executable(randomBinaryTreeTest tests/RandomBinaryTree_test.cpp)
+target_link_libraries(randomBinaryTreeTest ${GTEST_LIBRARIES} pthread RandomBinaryTreeLibrary)
