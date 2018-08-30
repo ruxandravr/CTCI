@@ -16,7 +16,7 @@ TEST(RandomBinaryTree, Inserting)
   bst.insert(9);
   bst.insert(1);
 
-  std::vector<int> result = {1, 3, 4, 5, 6, 7, 9, 10};
+  std::vector<int> result = {1, 3, 4, 5, 6, 7, 9, 10};  
   std::vector<int> traversal;
   bst.inorder(traversal);
   ASSERT_EQ(result, traversal);
@@ -34,7 +34,7 @@ TEST(RandomBinaryTree, Deleting)
 
   bst.deleteValue(8);
 
-  std::vector<int> result = {1, 2, 4, 5};
+  std::vector<int> result = {1, 2, 4, 5};  
   std::vector<int> traversal;
   bst.inorder(traversal);
   ASSERT_EQ(result, traversal);
@@ -50,6 +50,7 @@ TEST(RandomBinaryTree, RandomNumber)
   bst.insert(4);
   bst.insert(1);
 
+  // somehow the random generator always picks the value
   ASSERT_EQ(5, bst.getRandomValue());
 }
 /* MORE TO COME */
