@@ -46,6 +46,23 @@ TEST(Graphs, KhanTopsort)
   std::vector<int> result = {5, 6, 1, 2, 4, 3};
   ASSERT_EQ(result, g.getTopsort());
 }
+
+TEST(Graphs, BidirectionalBFS)
+{
+  Graph g(7, 6);
+  g.insertUndirected(1, 6);
+  g.insertUndirected(2, 5);
+  g.insertUndirected(6, 3);
+  g.insertUndirected(3, 5);
+  g.insertUndirected(4, 6);
+  g.insertUndirected(5, 6);
+
+
+  ASSERT_EQ(true, g.biBFS(4, 5));
+  ASSERT_EQ(true, g.biBFS(1, 2));
+
+}
+
 /* MORE TO COME */
 
 int main(int argc, char **argv)

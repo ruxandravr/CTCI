@@ -15,6 +15,16 @@ private:
   std::vector<int> topsort;
   std::vector<int> inDegrees;
 
+  /* Bidirectional BFS members */
+  std::vector<bool> sVisited;  // visited nodes from source
+  std::vector<bool> dVisited;  // visited nodes from destination
+  std::vector<int> sParents;
+  std::vector<int> dParents;
+  void BFSstep(std::queue<int> &q, std::vector<bool> &visited, std::vector<int> &parent);
+  int isIntersecting();
+  void printPath(int s, int d);
+
+
 public:
   Graph(int n, int m);
   void insertUndirected(int x, int y);
@@ -25,6 +35,7 @@ public:
   void sort();
   void khan();
   std::vector<int> getTopsort();
+  bool biBFS(int s, int d);
 };
 
 #endif

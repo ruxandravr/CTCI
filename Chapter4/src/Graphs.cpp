@@ -9,6 +9,10 @@ Graph::Graph(int n, int m)
   visitedState = std::vector<int>(n + 1, 0);
   inDegrees = std::vector<int>(n + 1, 0);
 
+  sVisited = std::vector<bool>(n + 1, false);
+  dVisited = std::vector<bool>(n + 1, false);
+  sParents = std::vector<int>(n + 1, -1);
+  dParents = std::vector<int>(n + 1, -1);
 }
 
 /* Insert an edge in the undirected graph. */
@@ -115,4 +119,94 @@ void Graph::khan()
   if (topsort.size() != nodes) {
     std::cout << "Cycle\n";
   }
+}
+
+/* One step of the BFS search: visit a node and all its neighbours, update
+their parents */
+void Graph::BFSstep(std::queue<int> &q, std::vector<bool> &visited,
+                    std::vector<int> &parent)
+{
+  int node = q.front();
+  q.pop();
+
+  for (auto neigh : adjList[node]) {
+    if (!visited[neigh]) {
+      visited[neigh] = true;
+      parent[neigh] = node;
+      q.push(neigh);
+    }
+  }
+}
+
+int Graph::isIntersecting()
+{
+  for (int i = 1; i <= nodes; ++i) {
+    if (sVisited[i] && dVisited[i]) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+
+/* Bidirectional BFS: take one step gradually fom both source and destination
+and verify if the paths intersect. */
+bool Graph::biBFS(int s, int d)
+{
+  std::queue<int> sQueue;
+  std::queue<int> dQueue;
+
+
+  sVisited = std::vector<bool>(nodes + 1, false);
+  dVisited = std::vector<bool>(nodes + 1, false);
+  sParents = std::vector<int>(nodes + 1, -1);
+  dParents = std::vector<int>(nodes + 1, -1);
+
+  sQueue.push(s);
+  dQueue.push(d);
+
+  while (!sQueue.empty() && !dQueue.empty()) {
+    BFSstep(sQueue, sVisited, sParents);
+    int intersecting = isIntersecting();
+    if (intersecting != -1) {
+      // printPath(s, d);
+      return true;
+    }
+    BFSstep(dQueue, dVisited, dParents);
+
+    intersecting = isIntersecting();
+
+    if (intersecting != -1) {
+      // printPath(s, d);
+      return true;
+    }
+  }
+  return false;
+}
+
+/* Print the path taken from source to destination by using parents vectors. */
+void Graph::printPath(int s, int d)
+{
+  std::vector<int> path;
+  int intersecting = isIntersecting();
+  path.push_back(intersecting);
+
+  int i = intersecting;
+  while (s != i) {
+    path.push_back(sParents[i]);
+    i = sParents[i];
+  }
+
+  std::reverse(path.begin(), path.end());
+
+  i = intersecting;
+  while (d != i) {
+    path.push_back(dParents[i]);
+    i = dParents[i];
+  }
+
+  for (auto elem : path) {
+    std::cout << elem << " ";
+  }
+  std::cout << "\n";
 }
